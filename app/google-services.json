@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "44082649514",
+    "project_id": "lessonmanagerapp",
+    "storage_bucket": "lessonmanagerapp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:44082649514:android:6227771d8ce0958a8d33d3",
+        "android_client_info": {
+          "package_name": "com.example.lessonmanager"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTXAInV4Y__5B8_rzSCZgPdB7I-wA8CaQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
