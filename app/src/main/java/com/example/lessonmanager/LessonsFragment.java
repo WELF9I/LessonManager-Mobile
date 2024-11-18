@@ -1,5 +1,6 @@
 package com.example.lessonmanager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.example.lessonmanager.models.Lesson;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,8 +107,9 @@ public class LessonsFragment extends Fragment implements LessonAdapter.OnLessonA
 
     @Override
     public void onEditLesson(Lesson lesson) {
-        // TODO: Implement edit functionality
-        // Launch EditLessonActivity with lesson data
+        Intent intent = new Intent(getContext(), EditLessonActivity.class);
+        intent.putExtra(LessonDetailsActivity.EXTRA_LESSON, lesson);
+        startActivity(intent);
     }
 
     @Override

@@ -76,7 +76,7 @@ public class RegisterActivity extends AppCompatActivity {
                         user.put("userId", userId);
                         user.put("name", name);
                         user.put("email", email);
-                        user.put("createdAt", System.currentTimeMillis());
+                        user.put("createdAt", com.google.firebase.Timestamp.now());
 
                         db.collection("users").document(userId)
                                 .set(user)

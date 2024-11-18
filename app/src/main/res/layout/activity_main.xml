@@ -63,7 +63,7 @@
             android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
             android:contentDescription="Add new lesson"
-            app:srcCompat="@drawable/ic_add"
+            app:srcCompat="@android:drawable/ic_input_add"
             app:tint="@android:color/white"
             app:backgroundTint="@color/material_dynamic_primary40"/>
 

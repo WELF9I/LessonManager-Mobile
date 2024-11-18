@@ -2,4 +2,17 @@
     <string name="app_name">Lesson Manager</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string-array name="subjects_array">
+        <item>Mathematics</item>
+        <item>Science</item>
+        <item>English</item>
+        <item>History</item>
+        <item>Other</item>
+    </string-array>
+
+    <string-array name="status_array">
+        <item>upcoming</item>
+        <item>completed</item>
+    </string-array>
 </resources>

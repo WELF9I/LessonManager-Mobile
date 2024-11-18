@@ -5,28 +5,28 @@
     android:background="@color/primary"
     android:gravity="bottom"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <ImageView
-        android:id="@+id/userProfileImage"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/nav_user_image"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:src="@drawable/default_profile" />
 
     <TextView
-        android:id="@+id/userNameText"
-        android:layout_width="wrap_content"
+        android:id="@+id/nav_user_name"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:textColor="@android:color/white"
+        android:paddingTop="8dp"
         android:textSize="16sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView
-        android:id="@+id/userEmailText"
+        android:id="@+id/nav_user_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
         android:textSize="14sp" />
 
 </LinearLayout>

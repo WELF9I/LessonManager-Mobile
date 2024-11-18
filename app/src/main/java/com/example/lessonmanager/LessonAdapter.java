@@ -1,5 +1,6 @@
 package com.example.lessonmanager;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +43,15 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.LessonView
         holder.subjectView.setText(lesson.getSubject());
         holder.dateView.setText(dateFormat.format(lesson.getDate()));
 
-        holder.editButton.setOnClickListener(v -> listener.onEditLesson(lesson));
+        // Handle item click
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(holder.itemView.getContext(), LessonDetailsActivity.class);
+            intent.putExtra(LessonDetailsActivity.EXTRA_LESSON, lesson);
+            holder.itemView.getContext().startActivity(intent);
+        });
+
+
+        // Handle delete button click
         holder.deleteButton.setOnClickListener(v -> listener.onDeleteLesson(lesson));
     }
 
@@ -68,7 +77,6 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.LessonView
             titleView = itemView.findViewById(R.id.lessonTitle);
             subjectView = itemView.findViewById(R.id.lessonSubject);
             dateView = itemView.findViewById(R.id.lessonDate);
-            editButton = itemView.findViewById(R.id.editButton);
             deleteButton = itemView.findViewById(R.id.deleteButton);
         }
     }

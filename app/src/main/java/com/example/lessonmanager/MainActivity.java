@@ -1,17 +1,24 @@
 package com.example.lessonmanager;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
-import androidx.annotation.NonNull;
+import android.view.View;
+import android.widget.TextView;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager2.widget.ViewPager2;
+
+import com.example.lessonmanager.auth.LoginActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
@@ -20,11 +27,14 @@ public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager2 viewPager;
     private FloatingActionButton fabAddLesson;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mAuth = FirebaseAuth.getInstance();
 
         // Initialize views
         initializeViews();
@@ -32,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         setupNavigationDrawer();
         setupViewPager();
         setupFab();
+        updateNavigationHeader();
     }
 
     private void initializeViews() {
@@ -58,9 +69,43 @@ public class MainActivity extends AppCompatActivity {
         toggle.syncState();
 
         navigationView.setNavigationItemSelectedListener(item -> {
-            // Handle navigation view item clicks here
+            int id = item.getItemId();
+
+            if (id == R.id.nav_home) {
+                viewPager.setCurrentItem(0);
+            } else if (id == R.id.nav_upcoming) {
+                viewPager.setCurrentItem(0);
+            } else if (id == R.id.nav_completed) {
+                viewPager.setCurrentItem(1);
+            } else if (id == R.id.nav_logout) {
+                performLogout();
+            }
+
+            drawerLayout.closeDrawer(GravityCompat.START);
             return true;
         });
+    }
+
+    private void updateNavigationHeader() {
+        View headerView = navigationView.getHeaderView(0);
+        TextView userName = headerView.findViewById(R.id.nav_user_name);
+        TextView userEmail = headerView.findViewById(R.id.nav_user_email);
+        CircleImageView userImage = headerView.findViewById(R.id.nav_user_image);
+
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            userName.setText(currentUser.getDisplayName());
+            userEmail.setText(currentUser.getEmail());
+            // You can set user image here if available
+        }
+    }
+
+    private void performLogout() {
+        mAuth.signOut();
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 
     private void setupViewPager() {
@@ -74,9 +119,17 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupFab() {
         fabAddLesson.setOnClickListener(view -> {
-            // Launch AddLessonActivity
-            // Intent intent = new Intent(this, AddLessonActivity.class);
-            // startActivity(intent);
+            Intent intent = new Intent(this, AddLessonActivity.class);
+            startActivity(intent);
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 }
