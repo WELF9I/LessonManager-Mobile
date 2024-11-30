@@ -4,26 +4,32 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import com.example.lessonmanager.models.Lesson;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.firestore.FirebaseFirestore;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 public class LessonDetailsActivity extends AppCompatActivity {
     public static final String EXTRA_LESSON = "extra_lesson";
+    private static final int EDIT_LESSON_REQUEST_CODE = 2;
 
     private TextView titleView, subjectView, dateView, statusView, descriptionView;
     private MaterialButton editButton;
     private SimpleDateFormat dateFormat;
+    private Lesson lesson;
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lesson_details);
+        db = FirebaseFirestore.getInstance();
         initializeViews();
-        Lesson lesson = getIntent().getParcelableExtra(EXTRA_LESSON);
+        lesson = getIntent().getParcelableExtra(EXTRA_LESSON);
         if (lesson != null) {
             displayLessonDetails(lesson);
         } else {
@@ -57,7 +63,7 @@ public class LessonDetailsActivity extends AppCompatActivity {
         editButton.setOnClickListener(v -> {
             Intent intent = new Intent(this, EditLessonActivity.class);
             intent.putExtra(EXTRA_LESSON, lesson);
-            startActivity(intent);
+            startActivityForResult(intent, EDIT_LESSON_REQUEST_CODE);
         });
     }
 
@@ -65,5 +71,24 @@ public class LessonDetailsActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == EDIT_LESSON_REQUEST_CODE && resultCode == RESULT_OK) {
+            // Refresh the lesson details
+            String lessonId = lesson.getLessonId();
+            db.collection("lessons").document(lessonId).get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        lesson = documentSnapshot.toObject(Lesson.class);
+                        if (lesson != null) {
+                            displayLessonDetails(lesson);
+                        }
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(this, "Error loading updated lesson details", Toast.LENGTH_SHORT).show();
+                    });
+        }
     }
 }

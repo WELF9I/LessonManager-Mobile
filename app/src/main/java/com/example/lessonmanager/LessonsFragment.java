@@ -78,7 +78,7 @@ public class LessonsFragment extends Fragment implements LessonAdapter.OnLessonA
                 .addSnapshotListener((value, error) -> {
                     progressBar.setVisibility(View.GONE);
                     if (error != null) {
-                        Toast.makeText(getContext(), "Error loading lessons", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getContext(), "Error loading lessons", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     if (value != null) {
@@ -111,7 +111,10 @@ public class LessonsFragment extends Fragment implements LessonAdapter.OnLessonA
         db.collection("lessons")
                 .document(lesson.getLessonId())
                 .delete()
-                .addOnSuccessListener(aVoid -> Toast.makeText(getContext(), "Lesson deleted", Toast.LENGTH_SHORT).show())
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(getContext(), "Lesson deleted", Toast.LENGTH_SHORT).show();
+                    lessonAdapter.removeLesson(lesson);
+                })
                 .addOnFailureListener(e -> Toast.makeText(getContext(), "Error deleting lesson", Toast.LENGTH_SHORT).show());
     }
 }

@@ -23,6 +23,14 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.LessonView
         void onDeleteLesson(Lesson lesson);
     }
 
+    public void removeLesson(Lesson lesson) {
+        int position = lessons.indexOf(lesson);
+        if (position != -1) {
+            lessons.remove(position);
+            notifyItemRemoved(position);
+        }
+    }
+
     public LessonAdapter(List<Lesson> lessons, OnLessonActionListener listener) {
         this.lessons = lessons;
         this.listener = listener;

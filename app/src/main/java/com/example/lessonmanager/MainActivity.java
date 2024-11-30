@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -18,9 +19,13 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity {
+    private static final int ADD_LESSON_REQUEST_CODE = 1;
+    private static final int EDIT_LESSON_REQUEST_CODE = 2;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private Toolbar toolbar;
@@ -28,12 +33,14 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager2 viewPager;
     private FloatingActionButton fabAddLesson;
     private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
         initializeViews();
         setupToolbar();
         setupNavigationDrawer();
@@ -112,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
     private void setupFab() {
         fabAddLesson.setOnClickListener(view -> {
             Intent intent = new Intent(this, AddLessonActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, ADD_LESSON_REQUEST_CODE);
         });
     }
 
@@ -123,5 +130,28 @@ public class MainActivity extends AppCompatActivity {
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if ((requestCode == ADD_LESSON_REQUEST_CODE || requestCode == EDIT_LESSON_REQUEST_CODE) && resultCode == RESULT_OK) {
+            fetchLessonsFromFirebase();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fetchLessonsFromFirebase();
+    }
+
+    private void fetchLessonsFromFirebase() {
+        db.collection("lessons").get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    setupViewPager();
+                })
+                .addOnFailureListener(e -> {
+                });
     }
 }
