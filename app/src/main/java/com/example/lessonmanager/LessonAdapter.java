@@ -42,16 +42,11 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.LessonView
         holder.titleView.setText(lesson.getTitle());
         holder.subjectView.setText(lesson.getSubject());
         holder.dateView.setText(dateFormat.format(lesson.getDate()));
-
-        // Handle item click
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(holder.itemView.getContext(), LessonDetailsActivity.class);
             intent.putExtra(LessonDetailsActivity.EXTRA_LESSON, lesson);
             holder.itemView.getContext().startActivity(intent);
         });
-
-
-        // Handle delete button click
         holder.deleteButton.setOnClickListener(v -> listener.onDeleteLesson(lesson));
     }
 

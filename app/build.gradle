@@ -41,6 +41,10 @@ dependencies {
     implementation 'com.google.android.material:material:1.9.0'
     implementation 'com.github.bumptech.glide:glide:4.12.0'
     implementation 'com.google.firebase:firebase-appcheck-playintegrity'
+
+    implementation 'com.squareup.okhttp3:okhttp:4.9.3' // For HTTP requests
+    implementation 'com.google.code.gson:gson:2.8.9' // For JSON handling
+
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
     implementation libs.appcompat
     implementation libs.material

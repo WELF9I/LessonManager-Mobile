@@ -33,10 +33,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         mAuth = FirebaseAuth.getInstance();
-
-        // Initialize views
         initializeViews();
         setupToolbar();
         setupNavigationDrawer();
@@ -67,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
         );
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-
         navigationView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
 
@@ -80,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
             } else if (id == R.id.nav_logout) {
                 performLogout();
             }
-
             drawerLayout.closeDrawer(GravityCompat.START);
             return true;
         });
@@ -91,12 +86,10 @@ public class MainActivity extends AppCompatActivity {
         TextView userName = headerView.findViewById(R.id.nav_user_name);
         TextView userEmail = headerView.findViewById(R.id.nav_user_email);
         CircleImageView userImage = headerView.findViewById(R.id.nav_user_image);
-
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
             userName.setText(currentUser.getDisplayName());
             userEmail.setText(currentUser.getEmail());
-            // You can set user image here if available
         }
     }
 
@@ -111,7 +104,6 @@ public class MainActivity extends AppCompatActivity {
     private void setupViewPager() {
         LessonPagerAdapter pagerAdapter = new LessonPagerAdapter(this);
         viewPager.setAdapter(pagerAdapter);
-
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
             tab.setText(position == 0 ? "Upcoming" : "Completed");
         }).attach();

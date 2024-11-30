@@ -54,15 +54,12 @@ public class LessonsFragment extends Fragment implements LessonAdapter.OnLessonA
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_lessons, container, false);
-
         recyclerView = view.findViewById(R.id.lessonsRecyclerView);
         progressBar = view.findViewById(R.id.progressBar);
         emptyView = view.findViewById(R.id.emptyView);
         emptyStateIcon = view.findViewById(R.id.emptyStateIcon);
-
         setupRecyclerView();
         loadLessons();
-
         return view;
     }
 
@@ -74,19 +71,16 @@ public class LessonsFragment extends Fragment implements LessonAdapter.OnLessonA
 
     private void loadLessons() {
         progressBar.setVisibility(View.VISIBLE);
-
         db.collection("lessons")
                 .whereEqualTo("userId", userId)
                 .whereEqualTo("status", status)
                 .orderBy("date", Query.Direction.ASCENDING)
                 .addSnapshotListener((value, error) -> {
                     progressBar.setVisibility(View.GONE);
-
                     if (error != null) {
                         Toast.makeText(getContext(), "Error loading lessons", Toast.LENGTH_SHORT).show();
                         return;
                     }
-
                     if (value != null) {
                         List<Lesson> lessons = value.toObjects(Lesson.class);
                         lessonAdapter.updateLessons(lessons);

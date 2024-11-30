@@ -22,13 +22,8 @@ public class LessonDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lesson_details);
-
-        // Initialize views
         initializeViews();
-
-        // Get lesson from intent
         Lesson lesson = getIntent().getParcelableExtra(EXTRA_LESSON);
-
         if (lesson != null) {
             displayLessonDetails(lesson);
         } else {
@@ -49,7 +44,6 @@ public class LessonDetailsActivity extends AppCompatActivity {
         statusView = findViewById(R.id.lessonStatusDetails);
         descriptionView = findViewById(R.id.lessonDescriptionDetails);
         editButton = findViewById(R.id.editLessonButton);
-
         dateFormat = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
     }
 

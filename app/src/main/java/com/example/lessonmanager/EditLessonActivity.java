@@ -26,14 +26,8 @@ public class EditLessonActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_lesson);
-
-        // Initialize Firebase
         db = FirebaseFirestore.getInstance();
-
-        // Initialize views
         initializeViews();
-
-        // Get lesson from intent
         lesson = getIntent().getParcelableExtra(LessonDetailsActivity.EXTRA_LESSON);
 
         if (lesson != null) {
@@ -58,19 +52,13 @@ public class EditLessonActivity extends AppCompatActivity {
         cancelButton = findViewById(R.id.cancelButton);
         chooseDateButton = findViewById(R.id.chooseDateButton);
 
-        // Set up status spinner
         ArrayAdapter<CharSequence> statusAdapter = ArrayAdapter.createFromResource(
                 this, R.array.status_array, android.R.layout.simple_spinner_item);
         statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         statusSpinner.setAdapter(statusAdapter);
 
-        // Date picker
         chooseDateButton.setOnClickListener(v -> showDatePickerDialog());
-
-        // Save button click listener
         saveButton.setOnClickListener(v -> saveLesson());
-
-        // Cancel button click listener
         cancelButton.setOnClickListener(v -> finish());
     }
 
@@ -78,13 +66,9 @@ public class EditLessonActivity extends AppCompatActivity {
         titleEditText.setText(lesson.getTitle());
         descriptionEditText.setText(lesson.getDescription());
         subjectEditText.setText(lesson.getSubject());
-
-        // Set status spinner
         int statusPosition = ((ArrayAdapter<String>) statusSpinner.getAdapter())
                 .getPosition(lesson.getStatus());
         statusSpinner.setSelection(statusPosition);
-
-        // Set date
         selectedDate = lesson.getDate();
     }
 
@@ -109,7 +93,6 @@ public class EditLessonActivity extends AppCompatActivity {
     }
 
     private void saveLesson() {
-        // Validate inputs
         String title = titleEditText.getText().toString().trim();
         String description = descriptionEditText.getText().toString().trim();
         String subject = subjectEditText.getText().toString().trim();
@@ -119,16 +102,12 @@ public class EditLessonActivity extends AppCompatActivity {
             Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
             return;
         }
-
-        // Update lesson object
         lesson.setTitle(title);
         lesson.setDescription(description);
         lesson.setSubject(subject);
         lesson.setStatus(status);
         lesson.setDate(selectedDate);
         lesson.setUpdatedAt(new Date());
-
-        // Update in Firestore
         db.collection("lessons")
                 .document(lesson.getLessonId())
                 .set(lesson)
